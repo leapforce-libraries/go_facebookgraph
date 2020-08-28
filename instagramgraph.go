@@ -2,9 +2,9 @@ package instagramgraph
 
 import (
 	"fmt"
-	"strings"
+	"net/http"
+	"os"
 
-	types "github.com/Leapforce-nl/go_types"
 	fb "github.com/huandu/facebook/v2"
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
@@ -15,19 +15,14 @@ const apiName string = "InstagramGraph"
 // GoogleAdminDirectory stores GoogleAdminDirectory configuration
 //
 type InstagramGraph struct {
-	baseURL string
-	//accessToken string
 	session *fb.Session
 }
 
 // methods
 //
-func NewInstagramGraph(baseURL string, clientID string, clientSecret string, scopes []string, accessToken string, isLive bool) (*InstagramGraph, error) {
+func NewInstagramGraph(clientID string, clientSecret string, scopes []string, accessToken string, isLive bool) (*InstagramGraph, error) {
 	ig := InstagramGraph{}
-	ig.baseURL = baseURL
-	//ig.accessToken = accessToken
 
-	// Get Facebook access token.
 	conf := &oauth2.Config{
 		ClientID:     clientID,
 		ClientSecret: clientSecret,
@@ -55,14 +50,50 @@ func NewInstagramGraph(baseURL string, clientID string, clientSecret string, sco
 	return &ig, nil
 }
 
-func (ig *InstagramGraph) Validate() error {
-	if ig.baseURL == "" {
-		return &types.ErrorString{fmt.Sprintf("%s baseURL not provided", apiName)}
+func InitToken(clientID string, clientSecret string, scopes []string) {
+	conf := &oauth2.Config{
+		ClientID:     clientID,
+		ClientSecret: clientSecret,
+		RedirectURL:  "http://localhost:8080/oauth/redirect",
+		Scopes:       scopes,
+		Endpoint:     oauth2fb.Endpoint,
 	}
 
-	if !strings.HasSuffix(ig.baseURL, "/") {
-		ig.baseURL = ig.baseURL + "/"
-	}
+	// Redirect user to consent page to ask for permission
+	// for the scopes specified above.
+	url := conf.AuthCodeURL("state", oauth2.AccessTypeOffline)
+	fmt.Printf("Visit the URL for the auth dialog: %v", url)
 
-	return nil
+	// Create a new redirect route
+	http.HandleFunc("/oauth/redirect", func(w http.ResponseWriter, r *http.Request) {
+		//
+		// get authorization code
+		//
+		err := r.ParseForm()
+		if err != nil {
+			fmt.Fprintf(os.Stdout, "could not parse query: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		code := r.FormValue("code")
+
+		fmt.Println("code: ", code)
+
+		token, err := conf.Exchange(oauth2.NoContext, code)
+		if err != nil {
+			return
+		}
+
+		fmt.Println("AccessToken: ", token.AccessToken)
+		fmt.Println("RefreshToken: ", token.RefreshToken)
+		fmt.Println("Expiry: ", token.Expiry)
+
+		w.WriteHeader(http.StatusFound)
+
+		return
+	})
+
+	http.ListenAndServe(":8080", nil)
+
+	return
 }
