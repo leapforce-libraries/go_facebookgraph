@@ -8,6 +8,9 @@ import (
 	fb "github.com/huandu/facebook/v2"
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
+
+	fb2 "github.com/Leapforce-nl/go_facebookgraph/fb"
+	ig "github.com/Leapforce-nl/go_facebookgraph/ig"
 )
 
 const apiName string = "FacebookGraph"
@@ -18,15 +21,12 @@ type FacebookGraph struct {
 	session *fb.Session
 }
 
-type PagingCursor struct {
-	Before string `mapstructure:"before"`
-	After  string `mapstructure:"after"`
+func (fb *FacebookGraph) Facebook() *fb2.Facebook {
+	return fb2.NewFacebook(fb.session)
 }
 
-type Paging struct {
-	Cursors  PagingCursor `mapstructure:"cursors"`
-	Previous string       `mapstructure:"previous"`
-	Next     string       `mapstructure:"next"`
+func (fb *FacebookGraph) Instagram() *ig.Instagram {
+	return ig.NewInstagram(fb.session)
 }
 
 // methods

@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"strings"
 
-	fg "github.com/leapforce-nl/go_facebookgraph"
 	"github.com/mitchellh/mapstructure"
 )
 
 type InsightsResponse struct {
 	Data   []Insight `mapstructure:"data"`
-	Paging fg.Paging `mapstructure:"paging"`
+	Paging Paging    `mapstructure:"paging"`
 }
 
 type InsightValue struct {
@@ -28,7 +27,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (ig *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64) (*[]Insight, error) {
+func (ig *Instagram) Insights(objectID string, metrics []string, period *string, since *int64, until *int64) (*[]Insight, error) {
 	params := make(map[string]interface{})
 	params["metric"] = strings.Join(metrics, ",")
 	if period != nil {

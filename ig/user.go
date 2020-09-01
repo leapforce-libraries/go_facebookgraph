@@ -21,7 +21,7 @@ type User struct {
 
 // User returns Instagram user details
 //
-func (ig *FacebookGraph) User(userID string, fields []string) (*User, error) {
+func (ig *Instagram) User(userID string, fields []string) (*User, error) {
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 

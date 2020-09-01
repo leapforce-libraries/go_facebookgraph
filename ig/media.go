@@ -18,7 +18,7 @@ type Media struct {
 
 // Media returns Instagram media details
 //
-func (ig *FacebookGraph) Media(mediaID string, fields []string) (*Media, error) {
+func (ig *Instagram) Media(mediaID string, fields []string) (*Media, error) {
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 
