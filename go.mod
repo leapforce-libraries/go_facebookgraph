@@ -1,4 +1,4 @@
-module github.com/Leapforce-nl/go_instagramgraph
+module github.com/Leapforce-nl/go_facebookgraph
 
 go 1.13
 

@@ -1,4 +1,4 @@
-package instagramgraph
+package facebookgraph
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ type Media struct {
 
 // Media returns Instagram media details
 //
-func (ig *InstagramGraph) Media(mediaID string, fields []string) (*Media, error) {
+func (ig *FacebookGraph) Media(mediaID string, fields []string) (*Media, error) {
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 

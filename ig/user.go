@@ -1,4 +1,4 @@
-package instagramgraph
+package facebookgraph
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ type User struct {
 
 // User returns Instagram user details
 //
-func (ig *InstagramGraph) User(userID string, fields []string) (*User, error) {
+func (ig *FacebookGraph) User(userID string, fields []string) (*User, error) {
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 

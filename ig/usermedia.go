@@ -1,4 +1,4 @@
-package instagramgraph
+package facebookgraph
 
 import (
 	"fmt"
@@ -19,7 +19,7 @@ type UserMedia struct {
 
 // UserMedia return Instagram medias for a user
 //
-func (ig *InstagramGraph) UserMedia(userID string, after string) (*UserMediaResponse, error) {
+func (ig *FacebookGraph) UserMedia(userID string, after string) (*UserMediaResponse, error) {
 	path := fmt.Sprintf("/%s/media?limit=%v&after=%s", userID, limit, after)
 
 	result, err := ig.session.Get(path, nil)

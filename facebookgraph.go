@@ -1,4 +1,4 @@
-package instagramgraph
+package facebookgraph
 
 import (
 	"fmt"
@@ -10,11 +10,11 @@ import (
 	oauth2fb "golang.org/x/oauth2/facebook"
 )
 
-const apiName string = "InstagramGraph"
+const apiName string = "FacebookGraph"
 
 // GoogleAdminDirectory stores GoogleAdminDirectory configuration
 //
-type InstagramGraph struct {
+type FacebookGraph struct {
 	session *fb.Session
 }
 
@@ -31,8 +31,8 @@ type Paging struct {
 
 // methods
 //
-func NewInstagramGraph(clientID string, clientSecret string, scopes []string, accessToken string, isLive bool) (*InstagramGraph, error) {
-	ig := InstagramGraph{}
+func NewFacebookGraph(clientID string, clientSecret string, scopes []string, accessToken string, isLive bool) (*FacebookGraph, error) {
+	ig := FacebookGraph{}
 
 	conf := &oauth2.Config{
 		ClientID:     clientID,
