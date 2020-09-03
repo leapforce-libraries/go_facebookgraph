@@ -3,9 +3,9 @@ package facebookgraph
 import (
 	"fmt"
 
+	models "github.com/Leapforce-nl/go_facebookgraph/models"
 	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
-	"github.com/mitchellh/mapstructure"
 )
 
 const limit int = 100
@@ -20,15 +20,21 @@ type PagePostFrom struct {
 	Name string `mapstructure:"name"`
 }
 
+type PagePostShares struct {
+	Count int64 `mapstructure:"count"`
+}
+
 type PagePost struct {
-	ID           string       `mapstructure:"id"`
-	CreatedTime  string       `mapstructure:"created_time"`
-	From         PagePostFrom `mapstructure:"from"`
-	FullPicture  string       `mapstructure:"full_picture"`
-	Message      string       `mapstructure:"message"`
-	PermalinkURL string       `mapstructure:"permalink_url"`
-	StatusType   string       `mapstructure:"status_type"`
-	UpdatedTime  string       `mapstructure:"updated_time"`
+	ID           string             `mapstructure:"id"`
+	Attachments  models.Attachments `mapstructure:"attachments"`
+	CreatedTime  string             `mapstructure:"created_time"`
+	From         PagePostFrom       `mapstructure:"from"`
+	FullPicture  string             `mapstructure:"full_picture"`
+	Message      string             `mapstructure:"message"`
+	PermalinkURL string             `mapstructure:"permalink_url"`
+	Shares       PagePostShares     `mapstructure:"shares"`
+	StatusType   string             `mapstructure:"status_type"`
+	UpdatedTime  string             `mapstructure:"updated_time"`
 }
 
 // PagePublishedPosts return Instagram medias for a user
@@ -46,7 +52,8 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 	result, err := fb.session.Get(path, params)
 
 	response := PagePublishedPostsResponse{}
-	err = mapstructure.Decode(result, &response)
+	err = result.DecodeField("", &response)
+	//err = mapstructure.Decode(result, &response)
 	if err != nil {
 		return nil, err
 	}

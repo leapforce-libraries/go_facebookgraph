@@ -6,6 +6,8 @@ import (
 
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
 	"github.com/mitchellh/mapstructure"
+
+	fb "github.com/huandu/facebook/v2"
 )
 
 type InsightsResponse struct {
@@ -29,8 +31,11 @@ type Insight struct {
 // Insights return Instagram insights for a user
 //
 func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, error) {
-	params := make(map[string]interface{})
+	path := fmt.Sprintf("/%s/insights", objectID)
+
+	params := fb.Params{}
 	params["metric"] = strings.Join(metrics, ",")
+
 	if period != nil {
 		params["period"] = *period
 	}
@@ -44,10 +49,7 @@ func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *str
 		params["access_token"] = *accessToken
 	}
 
-	result, err := fg.session.Get(fmt.Sprintf("/%s/insights", objectID), params)
-	if err != nil {
-		return nil, err
-	}
+	result, err := fg.getWithRetry(path, params)
 
 	response := InsightsResponse{}
 	err = mapstructure.Decode(result, &response)

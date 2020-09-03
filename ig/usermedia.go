@@ -3,8 +3,6 @@ package facebookgraph
 import (
 	"fmt"
 
-	"github.com/mitchellh/mapstructure"
-
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
 )
 
@@ -30,7 +28,9 @@ func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse,
 	}
 
 	response := UserMediaResponse{}
-	err = mapstructure.Decode(result, &response)
+
+	err = result.DecodeField("", &response)
+	//err = mapstructure.Decode(result, &response)
 	if err != nil {
 		return nil, err
 	}

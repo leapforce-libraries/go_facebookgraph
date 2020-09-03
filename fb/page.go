@@ -5,7 +5,6 @@ import (
 
 	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
-	"github.com/mitchellh/mapstructure"
 )
 
 type Page struct {
@@ -22,15 +21,19 @@ type Page struct {
 // Page returns Facebook page details
 //
 func (fb *Facebook) Page(pageID string) (*Page, error) {
+
+	path := fmt.Sprintf("/%s", pageID)
 	params := fb2.Params{
 		"fields": utils.GetTaggedTagNames("mapstructure", Page{}),
 	}
 
-	result, err := fb.session.Get(fmt.Sprintf("/%s", pageID), params)
+	result, err := fb.session.Get(path, params)
+	//result, err := fg.getWithRetry(path, params)
 
 	page := Page{}
 
-	err = mapstructure.Decode(result, &page)
+	err = result.DecodeField("", &page)
+	//err = mapstructure.Decode(result, &page)
 	if err != nil {
 		return nil, err
 	}

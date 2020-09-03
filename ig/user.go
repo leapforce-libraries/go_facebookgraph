@@ -3,8 +3,6 @@ package facebookgraph
 import (
 	"fmt"
 	"strings"
-
-	"github.com/mitchellh/mapstructure"
 )
 
 type User struct {
@@ -32,7 +30,8 @@ func (ig *Instagram) User(userID string, fields []string) (*User, error) {
 
 	user := User{}
 
-	err = mapstructure.Decode(result, &user)
+	err = result.DecodeField("", &user)
+	//err = mapstructure.Decode(result, &user)
 	if err != nil {
 		return nil, err
 	}

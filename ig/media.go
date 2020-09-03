@@ -3,8 +3,6 @@ package facebookgraph
 import (
 	"fmt"
 	"strings"
-
-	"github.com/mitchellh/mapstructure"
 )
 
 type Media struct {
@@ -29,7 +27,8 @@ func (ig *Instagram) Media(mediaID string, fields []string) (*Media, error) {
 
 	media := Media{}
 
-	err = mapstructure.Decode(result, &media)
+	err = result.DecodeField("", &media)
+	//err = mapstructure.Decode(result, &media)
 	if err != nil {
 		return nil, err
 	}
