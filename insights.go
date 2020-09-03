@@ -27,7 +27,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (ig *Instagram) Insights(objectID string, metrics []string, period *string, since *int64, until *int64) (*[]Insight, error) {
+func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64) (*[]Insight, error) {
 	params := make(map[string]interface{})
 	params["metric"] = strings.Join(metrics, ",")
 	if period != nil {
@@ -40,7 +40,7 @@ func (ig *Instagram) Insights(objectID string, metrics []string, period *string,
 		params["until"] = *until
 	}
 
-	result, err := ig.session.Get(fmt.Sprintf("/%s/insights", objectID), params)
+	result, err := fg.session.Get(fmt.Sprintf("/%s/insights", objectID), params)
 	if err != nil {
 		return nil, err
 	}

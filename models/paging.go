@@ -1,16 +1,4 @@
-package facebookgraph
-
-import (
-	fb "github.com/huandu/facebook/v2"
-)
-
-type Facebook struct {
-	session *fb.Session
-}
-
-func NewFacebook(session *fb.Session) *Facebook {
-	return &Facebook{session}
-}
+package models
 
 type PagingCursor struct {
 	Before string `mapstructure:"before"`
