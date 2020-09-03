@@ -33,6 +33,8 @@ github.com/Leapforce-nl/go_types v0.0.0-20200126202922-ba4900de15b8 h1:q0/mdn+Tn
 github.com/Leapforce-nl/go_types v0.0.0-20200126202922-ba4900de15b8/go.mod h1:AuUJ0pyk3Xc6IgEuzCr5NvEl277YQwiIgJ12/SfmByI=
 github.com/Leapforce-nl/go_utilities v0.0.0-20200903092928-68ffd5ca71d3 h1:V/t1QRwMh/OOVKubjmygE82FBwp2/PfVpOUwzotyzxw=
 github.com/Leapforce-nl/go_utilities v0.0.0-20200903092928-68ffd5ca71d3/go.mod h1:M1X6g0Ck9Vr68xjLY9wrVoli51cxEqljpWDXtfukqO4=
+github.com/Leapforce-nl/go_utilities v0.0.0-20200903103120-756bd24ddc04 h1:HyQLPguyhxohlRVI3kNSb6lR9vwcRkdHV7iufYDLxhU=
+github.com/Leapforce-nl/go_utilities v0.0.0-20200903103120-756bd24ddc04/go.mod h1:M1X6g0Ck9Vr68xjLY9wrVoli51cxEqljpWDXtfukqO4=
 github.com/Shopify/goreferrer v0.0.0-20181106222321-ec9c9a553398/go.mod h1:a1uqRtAwp2Xwc6WNPJEufxJ7fx3npB4UV/JOLmbu5I0=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/armon/consul-api v0.0.0-20180202201655-eb2c6b5be1b6/go.mod h1:grANhF5doyWs3UAsr3K4I6qtAmlQcZDesFNEHPZAzj8=

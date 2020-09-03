@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"strings"
 
+	models "github.com/Leapforce-nl/go_facebookgraph/models"
 	"github.com/mitchellh/mapstructure"
 )
 
 type InsightsResponse struct {
-	Data   []Insight `mapstructure:"data"`
-	Paging Paging    `mapstructure:"paging"`
+	Data   []Insight     `mapstructure:"data"`
+	Paging models.Paging `mapstructure:"paging"`
 }
 
 type InsightValue struct {
@@ -27,7 +28,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64) (*[]Insight, error) {
+func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, error) {
 	params := make(map[string]interface{})
 	params["metric"] = strings.Join(metrics, ",")
 	if period != nil {
@@ -38,6 +39,9 @@ func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *str
 	}
 	if until != nil {
 		params["until"] = *until
+	}
+	if accessToken != nil {
+		params["access_token"] = *accessToken
 	}
 
 	result, err := fg.session.Get(fmt.Sprintf("/%s/insights", objectID), params)

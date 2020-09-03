@@ -40,7 +40,7 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 		"limit":        limit,
 		"after":        after,
 		"access_token": accessToken,
-		"fields":       utils.GetJsonTaggedFieldNames("mapstructure", PagePost{}),
+		"fields":       utils.GetTaggedTagNames("mapstructure", PagePost{}),
 	}
 
 	result, err := fb.session.Get(path, params)

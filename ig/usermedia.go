@@ -5,14 +5,14 @@ import (
 
 	"github.com/mitchellh/mapstructure"
 
-	paging "github.com/Leapforce-nl/go_facebookgraph/paging"
+	models "github.com/Leapforce-nl/go_facebookgraph/models"
 )
 
 const limit int = 100
 
 type UserMediaResponse struct {
 	Data   []UserMedia   `mapstructure:"data"`
-	Paging paging.Paging `mapstructure:"paging"`
+	Paging models.Paging `mapstructure:"paging"`
 }
 
 type UserMedia struct {

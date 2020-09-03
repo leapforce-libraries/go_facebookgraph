@@ -23,7 +23,7 @@ type Page struct {
 //
 func (fb *Facebook) Page(pageID string) (*Page, error) {
 	params := fb2.Params{
-		"fields": utils.GetJsonTaggedFieldNames("mapstructure", Page{}),
+		"fields": utils.GetTaggedTagNames("mapstructure", Page{}),
 	}
 
 	result, err := fb.session.Get(fmt.Sprintf("/%s", pageID), params)

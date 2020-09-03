@@ -1,4 +1,4 @@
-package models
+package facebookgraph
 
 type PagingCursor struct {
 	Before string `mapstructure:"before"`
