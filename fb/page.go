@@ -3,6 +3,7 @@ package facebookgraph
 import (
 	"fmt"
 
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
 	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
 )
@@ -27,8 +28,10 @@ func (fb *Facebook) Page(pageID string) (*Page, error) {
 		"fields": utils.GetTaggedTagNames("mapstructure", Page{}),
 	}
 
-	result, err := fb.session.Get(path, params)
-	//result, err := fg.getWithRetry(path, params)
+	result, err := api.GetWithRetry(fb.session, path, params)
+	if err != nil {
+		return nil, err
+	}
 
 	page := Page{}
 

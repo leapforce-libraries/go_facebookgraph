@@ -3,6 +3,10 @@ package facebookgraph
 import (
 	"fmt"
 	"strings"
+
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
+
+	fb2 "github.com/huandu/facebook/v2"
 )
 
 type Media struct {
@@ -17,10 +21,13 @@ type Media struct {
 // Media returns Instagram media details
 //
 func (ig *Instagram) Media(mediaID string, fields []string) (*Media, error) {
-	params := make(map[string]interface{})
-	params["fields"] = strings.Join(fields, ",")
+	path := fmt.Sprintf("/%s", mediaID)
 
-	result, err := ig.session.Get(fmt.Sprintf("/%s", mediaID), params)
+	params := fb2.Params{
+		"fields": strings.Join(fields, ","),
+	}
+
+	result, err := api.GetWithRetry(ig.session, path, params)
 	if err != nil {
 		return nil, err
 	}

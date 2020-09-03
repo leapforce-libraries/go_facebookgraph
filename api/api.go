@@ -10,8 +10,13 @@ import (
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
 )
 
-func getWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result, error) {
-	maxRetry := 10
+const (
+	maxRetry          int   = 10
+	errorCodeRetry    int64 = 190
+	retryWaitXSeconds int   = 3
+)
+
+func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result, error) {
 	retry := 0
 	var result fb.Result
 	var err error
@@ -25,9 +30,9 @@ func getWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 				return nil, err
 			}
 
-			if errorResponse.Error.Code == 190 {
+			if errorResponse.Error.Code == errorCodeRetry {
 				retry++
-				time.Sleep(3 * time.Second)
+				time.Sleep(time.Duration(retryWaitXSeconds) * time.Second)
 				fmt.Println("attempt:", retry)
 			} else {
 				return nil, err

@@ -4,16 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"time"
 
 	fb "github.com/huandu/facebook/v2"
-	"github.com/mitchellh/mapstructure"
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
 
 	fb2 "github.com/Leapforce-nl/go_facebookgraph/fb"
 	ig "github.com/Leapforce-nl/go_facebookgraph/ig"
-	models "github.com/Leapforce-nl/go_facebookgraph/models"
 )
 
 const apiName string = "FacebookGraph"
@@ -110,34 +107,4 @@ func InitToken(clientID string, clientSecret string, scopes []string) {
 	http.ListenAndServe(":8080", nil)
 
 	return
-}
-
-func (fg *FacebookGraph) getWithRetry(path string, params fb.Params) (fb.Result, error) {
-	maxRetry := 10
-	retry := 0
-	var result fb.Result
-	var err error
-
-	for retry < maxRetry {
-		result, err = fg.session.Get(path, params)
-		if err != nil {
-			errorResponse := models.ErrorResponse{}
-			err = mapstructure.Decode(result, &errorResponse)
-			if err != nil {
-				return nil, err
-			}
-
-			if errorResponse.Error.Code == 190 {
-				retry++
-				time.Sleep(3 * time.Second)
-				fmt.Println("attempt:", retry)
-			} else {
-				return nil, err
-			}
-		}
-
-		retry = maxRetry
-	}
-
-	return result, nil
 }

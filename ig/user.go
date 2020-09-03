@@ -3,6 +3,8 @@ package facebookgraph
 import (
 	"fmt"
 	"strings"
+
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
 )
 
 type User struct {
@@ -20,10 +22,11 @@ type User struct {
 // User returns Instagram user details
 //
 func (ig *Instagram) User(userID string, fields []string) (*User, error) {
+	path := fmt.Sprintf("/%s", userID)
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 
-	result, err := ig.session.Get(fmt.Sprintf("/%s", userID), params)
+	result, err := api.GetWithRetry(ig.session, path, params)
 	if err != nil {
 		return nil, err
 	}

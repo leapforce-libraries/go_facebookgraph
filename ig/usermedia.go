@@ -3,7 +3,10 @@ package facebookgraph
 import (
 	"fmt"
 
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
+
+	fb2 "github.com/huandu/facebook/v2"
 )
 
 const limit int = 100
@@ -20,9 +23,14 @@ type UserMedia struct {
 // UserMedia return Instagram medias for a user
 //
 func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse, error) {
-	path := fmt.Sprintf("/%s/media?limit=%v&after=%s", userID, limit, after)
+	path := fmt.Sprintf("/%s/media", userID)
 
-	result, err := ig.session.Get(path, nil)
+	params := fb2.Params{
+		"limit": limit,
+		"after": after,
+	}
+
+	result, err := api.GetWithRetry(ig.session, path, params)
 	if err != nil {
 		return nil, err
 	}

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
 	"github.com/mitchellh/mapstructure"
 
@@ -49,7 +50,10 @@ func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *str
 		params["access_token"] = *accessToken
 	}
 
-	result, err := fg.getWithRetry(path, params)
+	result, err := api.GetWithRetry(fg.session, path, params)
+	if err != nil {
+		return nil, err
+	}
 
 	response := InsightsResponse{}
 	err = mapstructure.Decode(result, &response)

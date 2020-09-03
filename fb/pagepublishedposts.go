@@ -3,6 +3,7 @@ package facebookgraph
 import (
 	"fmt"
 
+	api "github.com/Leapforce-nl/go_facebookgraph/api"
 	models "github.com/Leapforce-nl/go_facebookgraph/models"
 	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
@@ -49,7 +50,10 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 		"fields":       utils.GetTaggedTagNames("mapstructure", PagePost{}),
 	}
 
-	result, err := fb.session.Get(path, params)
+	result, err := api.GetWithRetry(fb.session, path, params)
+	if err != nil {
+		return nil, err
+	}
 
 	response := PagePublishedPostsResponse{}
 	err = result.DecodeField("", &response)
