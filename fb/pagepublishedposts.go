@@ -9,7 +9,7 @@ import (
 	fb2 "github.com/huandu/facebook/v2"
 )
 
-const limit int = 100
+const pagePublishedPostsLimit int = 50 //limit 100 icm comments does not work...
 
 type PagePublishedPostsResponse struct {
 	Data   []PagePost `mapstructure:"data"`
@@ -44,7 +44,7 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 	path := fmt.Sprintf("/%s/published_posts", pageID)
 
 	params := fb2.Params{
-		"limit":        limit,
+		"limit":        pagePublishedPostsLimit,
 		"after":        after,
 		"access_token": accessToken,
 		"fields":       utils.GetTaggedTagNames("mapstructure", PagePost{}),
