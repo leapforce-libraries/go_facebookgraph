@@ -3,9 +3,9 @@ package facebookgraph
 import (
 	"fmt"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
-	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
+	utils "github.com/leapforce-libraries/go_utilities"
 )
 
 type Page struct {

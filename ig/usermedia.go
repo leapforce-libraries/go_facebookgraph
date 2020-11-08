@@ -3,8 +3,8 @@ package facebookgraph
 import (
 	"fmt"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
-	models "github.com/Leapforce-nl/go_facebookgraph/models"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
+	models "github.com/leapforce-libraries/go_facebookgraph/models"
 
 	fb2 "github.com/huandu/facebook/v2"
 )

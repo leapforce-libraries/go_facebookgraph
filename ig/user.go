@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
 type User struct {

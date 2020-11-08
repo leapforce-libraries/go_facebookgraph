@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
-	models "github.com/Leapforce-nl/go_facebookgraph/models"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
+	models "github.com/leapforce-libraries/go_facebookgraph/models"
 	"github.com/mitchellh/mapstructure"
 
 	fb "github.com/huandu/facebook/v2"

@@ -3,10 +3,10 @@ package facebookgraph
 import (
 	"fmt"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
-	models "github.com/Leapforce-nl/go_facebookgraph/models"
-	utils "github.com/Leapforce-nl/go_utilities"
 	fb2 "github.com/huandu/facebook/v2"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
+	models "github.com/leapforce-libraries/go_facebookgraph/models"
+	utils "github.com/leapforce-libraries/go_utilities"
 )
 
 const pagePublishedPostsLimit int = 50 //limit 100 icm comments does not work...

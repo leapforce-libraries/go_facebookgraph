@@ -3,8 +3,8 @@ package facebookgraph
 import (
 	"fmt"
 
-	api "github.com/Leapforce-nl/go_facebookgraph/api"
 	fb2 "github.com/huandu/facebook/v2"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
 const postCommentsLimit int = 50 //limit 100 icm comments does not work...

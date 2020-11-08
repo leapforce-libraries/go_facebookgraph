@@ -9,8 +9,8 @@ import (
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
 
-	fb2 "github.com/Leapforce-nl/go_facebookgraph/fb"
-	ig "github.com/Leapforce-nl/go_facebookgraph/ig"
+	fb2 "github.com/leapforce-libraries/go_facebookgraph/fb"
+	ig "github.com/leapforce-libraries/go_facebookgraph/ig"
 )
 
 const apiName string = "FacebookGraph"

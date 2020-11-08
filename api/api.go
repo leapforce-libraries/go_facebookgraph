@@ -7,7 +7,7 @@ import (
 	fb "github.com/huandu/facebook/v2"
 	"github.com/mitchellh/mapstructure"
 
-	models "github.com/Leapforce-nl/go_facebookgraph/models"
+	models "github.com/leapforce-libraries/go_facebookgraph/models"
 )
 
 const (
