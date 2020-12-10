@@ -7,6 +7,7 @@ import (
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 
 	fb2 "github.com/huandu/facebook/v2"
+	errortools "github.com/leapforce-libraries/go_errortools"
 )
 
 type Media struct {
@@ -21,24 +22,24 @@ type Media struct {
 
 // Media returns Instagram media details
 //
-func (ig *Instagram) Media(mediaID string, fields []string) (*Media, error) {
+func (ig *Instagram) Media(mediaID string, fields []string) (*Media, *errortools.Error) {
 	path := fmt.Sprintf("/%s", mediaID)
 
 	params := fb2.Params{
 		"fields": strings.Join(fields, ","),
 	}
 
-	result, err := api.GetWithRetry(ig.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(ig.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	media := Media{}
 
-	err = result.DecodeField("", &media)
+	err := result.DecodeField("", &media)
 	//err = mapstructure.Decode(result, &media)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &media, nil

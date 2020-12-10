@@ -3,6 +3,7 @@ package facebookgraph
 import (
 	"fmt"
 
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 	models "github.com/leapforce-libraries/go_facebookgraph/models"
 
@@ -22,7 +23,7 @@ type UserMedia struct {
 
 // UserMedia return Instagram medias for a user
 //
-func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse, error) {
+func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/media", userID)
 
 	params := fb2.Params{
@@ -30,17 +31,17 @@ func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse,
 		"after": after,
 	}
 
-	result, err := api.GetWithRetry(ig.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(ig.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	response := UserMediaResponse{}
 
-	err = result.DecodeField("", &response)
+	err := result.DecodeField("", &response)
 	//err = mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &response, nil

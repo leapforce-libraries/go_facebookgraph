@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	fb2 "github.com/huandu/facebook/v2"
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
@@ -29,7 +30,7 @@ type PostComment struct {
 
 // PostComments returns Facebook post comments for a post
 //
-func (fb *Facebook) PostComments(postID string, accessToken string, after string) (*PostCommentsResponse, error) {
+func (fb *Facebook) PostComments(postID string, accessToken string, after string) (*PostCommentsResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
@@ -39,16 +40,16 @@ func (fb *Facebook) PostComments(postID string, accessToken string, after string
 		"summary":      false,
 	}
 
-	result, err := api.GetWithRetry(fb.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(fb.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	response := PostCommentsResponse{}
-	err = result.DecodeField("", &response)
+	err := result.DecodeField("", &response)
 	//err = mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &response, nil
@@ -56,7 +57,7 @@ func (fb *Facebook) PostComments(postID string, accessToken string, after string
 
 // PostCommentsCount returns Facebook post comments count for a post
 //
-func (fb *Facebook) PostCommentsCount(postID string, accessToken string) (*int64, error) {
+func (fb *Facebook) PostCommentsCount(postID string, accessToken string) (*int64, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
@@ -65,16 +66,16 @@ func (fb *Facebook) PostCommentsCount(postID string, accessToken string) (*int64
 		"summary":      true,
 	}
 
-	result, err := api.GetWithRetry(fb.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(fb.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	response := PostCommentsResponse{}
-	err = result.DecodeField("", &response)
+	err := result.DecodeField("", &response)
 	//err = mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &response.Summary.TotalCount, nil

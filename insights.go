@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 	models "github.com/leapforce-libraries/go_facebookgraph/models"
 	"github.com/mitchellh/mapstructure"
@@ -31,7 +32,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, error) {
+func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, *errortools.Error) {
 	path := fmt.Sprintf("/%s/insights", objectID)
 
 	params := fb.Params{}
@@ -50,15 +51,15 @@ func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *str
 		params["access_token"] = *accessToken
 	}
 
-	result, err := api.GetWithRetry(fg.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(fg.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	response := InsightsResponse{}
-	err = mapstructure.Decode(result, &response)
+	err := mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &response.Data, nil

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
@@ -21,22 +22,22 @@ type User struct {
 
 // User returns Instagram user details
 //
-func (ig *Instagram) User(userID string, fields []string) (*User, error) {
+func (ig *Instagram) User(userID string, fields []string) (*User, *errortools.Error) {
 	path := fmt.Sprintf("/%s", userID)
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 
-	result, err := api.GetWithRetry(ig.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(ig.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	user := User{}
 
-	err = result.DecodeField("", &user)
+	err := result.DecodeField("", &user)
 	//err = mapstructure.Decode(result, &user)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &user, nil

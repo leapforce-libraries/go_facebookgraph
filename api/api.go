@@ -7,6 +7,7 @@ import (
 	fb "github.com/huandu/facebook/v2"
 	"github.com/mitchellh/mapstructure"
 
+	errortools "github.com/leapforce-libraries/go_errortools"
 	models "github.com/leapforce-libraries/go_facebookgraph/models"
 )
 
@@ -16,7 +17,7 @@ const (
 	retryWaitXSeconds int   = 3
 )
 
-func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result, error) {
+func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result, *errortools.Error) {
 	retry := 0
 	var result fb.Result
 	var err error
@@ -27,7 +28,7 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 			errorResponse := models.ErrorResponse{}
 			err = mapstructure.Decode(result, &errorResponse)
 			if err != nil {
-				return nil, err
+				return nil, errortools.ErrorMessage(err)
 			}
 
 			if errorResponse.Error.Code == errorCodeRetry {
@@ -35,7 +36,7 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 				time.Sleep(time.Duration(retryWaitXSeconds) * time.Second)
 				fmt.Println("attempt:", retry)
 			} else {
-				return nil, err
+				return nil, errortools.ErrorMessage(err)
 			}
 		}
 

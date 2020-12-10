@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	fb2 "github.com/huandu/facebook/v2"
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 	models "github.com/leapforce-libraries/go_facebookgraph/models"
 	utils "github.com/leapforce-libraries/go_utilities"
@@ -40,7 +41,7 @@ type PagePost struct {
 
 // PagePublishedPosts return Instagram medias for a user
 //
-func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after string) (*PagePublishedPostsResponse, error) {
+func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after string) (*PagePublishedPostsResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/published_posts", pageID)
 
 	params := fb2.Params{
@@ -50,16 +51,16 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 		"fields":       utils.GetTaggedTagNames("mapstructure", PagePost{}),
 	}
 
-	result, err := api.GetWithRetry(fb.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(fb.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	response := PagePublishedPostsResponse{}
-	err = result.DecodeField("", &response)
+	err := result.DecodeField("", &response)
 	//err = mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &response, nil

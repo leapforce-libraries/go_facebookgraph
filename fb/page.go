@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	fb2 "github.com/huandu/facebook/v2"
+	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 	utils "github.com/leapforce-libraries/go_utilities"
 )
@@ -21,24 +22,24 @@ type Page struct {
 
 // Page returns Facebook page details
 //
-func (fb *Facebook) Page(pageID string) (*Page, error) {
+func (fb *Facebook) Page(pageID string) (*Page, *errortools.Error) {
 
 	path := fmt.Sprintf("/%s", pageID)
 	params := fb2.Params{
 		"fields": utils.GetTaggedTagNames("mapstructure", Page{}),
 	}
 
-	result, err := api.GetWithRetry(fb.session, path, params)
-	if err != nil {
-		return nil, err
+	result, e := api.GetWithRetry(fb.session, path, params)
+	if e != nil {
+		return nil, e
 	}
 
 	page := Page{}
 
-	err = result.DecodeField("", &page)
+	err := result.DecodeField("", &page)
 	//err = mapstructure.Decode(result, &page)
 	if err != nil {
-		return nil, err
+		return nil, errortools.ErrorMessage(err)
 	}
 
 	return &page, nil
