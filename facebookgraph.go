@@ -31,7 +31,7 @@ func (fb *FacebookGraph) Instagram() *ig.Instagram {
 
 // methods
 //
-func NewFacebookGraph(clientID string, clientSecret string, scopes []string, accessToken string, isLive bool) *FacebookGraph {
+func NewFacebookGraph(clientID string, clientSecret string, scopes []string, accessToken string) *FacebookGraph {
 	ig := FacebookGraph{}
 
 	conf := &oauth2.Config{
