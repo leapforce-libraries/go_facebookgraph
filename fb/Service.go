@@ -4,12 +4,12 @@ import (
 	fb "github.com/huandu/facebook/v2"
 )
 
-type Facebook struct {
+type Service struct {
 	session *fb.Session
 }
 
-func NewFacebook(session *fb.Session) *Facebook {
-	return &Facebook{session}
+func NewService(session *fb.Session) *Service {
+	return &Service{session}
 }
 
 type PagingCursor struct {

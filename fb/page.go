@@ -22,14 +22,14 @@ type Page struct {
 
 // Page returns Facebook page details
 //
-func (fb *Facebook) Page(pageID string) (*Page, *errortools.Error) {
+func (service *Service) Page(pageID string) (*Page, *errortools.Error) {
 
 	path := fmt.Sprintf("/%s", pageID)
 	params := fb2.Params{
 		"fields": utils.GetTaggedTagNames("mapstructure", Page{}),
 	}
 
-	result, e := api.GetWithRetry(fb.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

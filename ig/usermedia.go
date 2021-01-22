@@ -23,7 +23,7 @@ type UserMedia struct {
 
 // UserMedia return Instagram medias for a user
 //
-func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse, *errortools.Error) {
+func (service *Service) UserMedia(userID string, after string) (*UserMediaResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/media", userID)
 
 	params := fb2.Params{
@@ -31,7 +31,7 @@ func (ig *Instagram) UserMedia(userID string, after string) (*UserMediaResponse,
 		"after": after,
 	}
 
-	result, e := api.GetWithRetry(ig.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

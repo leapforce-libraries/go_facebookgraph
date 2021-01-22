@@ -32,7 +32,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, *errortools.Error) {
+func (service *Service) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, *errortools.Error) {
 	path := fmt.Sprintf("/%s/insights", objectID)
 
 	params := fb.Params{}
@@ -51,7 +51,7 @@ func (fg *FacebookGraph) Insights(objectID string, metrics []string, period *str
 		params["access_token"] = *accessToken
 	}
 
-	result, e := api.GetWithRetry(fg.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

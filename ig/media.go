@@ -22,14 +22,14 @@ type Media struct {
 
 // Media returns Instagram media details
 //
-func (ig *Instagram) Media(mediaID string, fields []string) (*Media, *errortools.Error) {
+func (service *Service) Media(mediaID string, fields []string) (*Media, *errortools.Error) {
 	path := fmt.Sprintf("/%s", mediaID)
 
 	params := fb2.Params{
 		"fields": strings.Join(fields, ","),
 	}
 
-	result, e := api.GetWithRetry(ig.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

@@ -30,7 +30,7 @@ type PostComment struct {
 
 // PostComments returns Facebook post comments for a post
 //
-func (fb *Facebook) PostComments(postID string, accessToken string, after string) (*PostCommentsResponse, *errortools.Error) {
+func (service *Service) PostComments(postID string, accessToken string, after string) (*PostCommentsResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
@@ -40,7 +40,7 @@ func (fb *Facebook) PostComments(postID string, accessToken string, after string
 		"summary":      false,
 	}
 
-	result, e := api.GetWithRetry(fb.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}
@@ -57,7 +57,7 @@ func (fb *Facebook) PostComments(postID string, accessToken string, after string
 
 // PostCommentsCount returns Facebook post comments count for a post
 //
-func (fb *Facebook) PostCommentsCount(postID string, accessToken string) (*int64, *errortools.Error) {
+func (service *Service) PostCommentsCount(postID string, accessToken string) (*int64, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
@@ -66,7 +66,7 @@ func (fb *Facebook) PostCommentsCount(postID string, accessToken string) (*int64
 		"summary":      true,
 	}
 
-	result, e := api.GetWithRetry(fb.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

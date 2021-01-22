@@ -5,34 +5,35 @@ import (
 	"net/http"
 	"os"
 
-	fb "github.com/huandu/facebook/v2"
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
 
-	fb2 "github.com/leapforce-libraries/go_facebookgraph/fb"
+	go_fb "github.com/leapforce-libraries/go_facebookgraph/fb"
 	ig "github.com/leapforce-libraries/go_facebookgraph/ig"
+
+	fb "github.com/huandu/facebook/v2"
 )
 
-const apiName string = "FacebookGraph"
+const APIName string = "FacebookGraph"
 
 // GoogleAdminDirectory stores GoogleAdminDirectory configuration
 //
-type FacebookGraph struct {
+type Service struct {
 	session *fb.Session
 }
 
-func (fb *FacebookGraph) Facebook() *fb2.Facebook {
-	return fb2.NewFacebook(fb.session)
+func (service *Service) FacebookService() *go_fb.Service {
+	return go_fb.NewService(service.session)
 }
 
-func (fb *FacebookGraph) Instagram() *ig.Instagram {
-	return ig.NewInstagram(fb.session)
+func (service *Service) InstagramService() *ig.Service {
+	return ig.NewService(service.session)
 }
 
 // methods
 //
-func NewFacebookGraph(clientID string, clientSecret string, scopes []string, accessToken string) *FacebookGraph {
-	ig := FacebookGraph{}
+func NewService(clientID string, clientSecret string, scopes []string, accessToken string) *Service {
+	service := Service{}
 
 	conf := &oauth2.Config{
 		ClientID:     clientID,
@@ -56,9 +57,9 @@ func NewFacebookGraph(clientID string, clientSecret string, scopes []string, acc
 	}
 	_session.SetDebug(fb.DEBUG_OFF)
 
-	ig.session = _session
+	service.session = _session
 
-	return &ig
+	return &service
 }
 
 func InitToken(clientID string, clientSecret string, scopes []string) {

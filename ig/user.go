@@ -22,12 +22,12 @@ type User struct {
 
 // User returns Instagram user details
 //
-func (ig *Instagram) User(userID string, fields []string) (*User, *errortools.Error) {
+func (service *Service) User(userID string, fields []string) (*User, *errortools.Error) {
 	path := fmt.Sprintf("/%s", userID)
 	params := make(map[string]interface{})
 	params["fields"] = strings.Join(fields, ",")
 
-	result, e := api.GetWithRetry(ig.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}

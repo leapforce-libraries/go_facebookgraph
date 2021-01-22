@@ -41,7 +41,7 @@ type PagePost struct {
 
 // PagePublishedPosts return Instagram medias for a user
 //
-func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after string) (*PagePublishedPostsResponse, *errortools.Error) {
+func (service *Service) PagePublishedPosts(pageID string, accessToken string, after string) (*PagePublishedPostsResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/published_posts", pageID)
 
 	params := fb2.Params{
@@ -51,7 +51,7 @@ func (fb *Facebook) PagePublishedPosts(pageID string, accessToken string, after 
 		"fields":       utils.GetTaggedTagNames("mapstructure", PagePost{}),
 	}
 
-	result, e := api.GetWithRetry(fb.session, path, params)
+	result, e := api.GetWithRetry(service.session, path, params)
 	if e != nil {
 		return nil, e
 	}
