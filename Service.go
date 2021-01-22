@@ -8,18 +8,29 @@ import (
 	"golang.org/x/oauth2"
 	oauth2fb "golang.org/x/oauth2/facebook"
 
+	errortools "github.com/leapforce-libraries/go_errortools"
 	go_fb "github.com/leapforce-libraries/go_facebookgraph/fb"
 	ig "github.com/leapforce-libraries/go_facebookgraph/ig"
 
 	fb "github.com/huandu/facebook/v2"
 )
 
-const APIName string = "FacebookGraph"
+const (
+	APIName     string = "FacebookGraph"
+	RedirectURL string = "http://localhost:8080/oauth/redirect"
+)
 
 // GoogleAdminDirectory stores GoogleAdminDirectory configuration
 //
 type Service struct {
 	session *fb.Session
+}
+
+type ServiceConfig struct {
+	ClientID     string
+	ClientSecret string
+	Scopes       []string
+	AccessToken  string
 }
 
 func (service *Service) FacebookService() *go_fb.Service {
@@ -32,20 +43,19 @@ func (service *Service) InstagramService() *ig.Service {
 
 // methods
 //
-func NewService(clientID string, clientSecret string, scopes []string, accessToken string) *Service {
+func NewService(config ServiceConfig) *Service {
 	service := Service{}
 
 	conf := &oauth2.Config{
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		RedirectURL:  "http://localhost:8080/oauth/redirect",
-		Scopes:       scopes,
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		RedirectURL:  RedirectURL,
+		Scopes:       config.Scopes,
 		Endpoint:     oauth2fb.Endpoint,
 	}
 
 	token := oauth2.Token{}
-	token.AccessToken = accessToken
-	//token.Expiry, _ = time.Parse("2006-01-02", "2020-10-01")
+	token.AccessToken = config.AccessToken
 
 	// Create a client to manage access token life cycle.
 	client := conf.Client(oauth2.NoContext, &token)
@@ -62,12 +72,13 @@ func NewService(clientID string, clientSecret string, scopes []string, accessTok
 	return &service
 }
 
-func InitToken(clientID string, clientSecret string, scopes []string) {
+func InitToken(config ServiceConfig) *errortools.Error {
+
 	conf := &oauth2.Config{
-		ClientID:     clientID,
-		ClientSecret: clientSecret,
-		RedirectURL:  "http://localhost:8080/oauth/redirect",
-		Scopes:       scopes,
+		ClientID:     config.ClientID,
+		ClientSecret: config.ClientSecret,
+		RedirectURL:  RedirectURL,
+		Scopes:       config.Scopes,
 		Endpoint:     oauth2fb.Endpoint,
 	}
 
@@ -93,7 +104,7 @@ func InitToken(clientID string, clientSecret string, scopes []string) {
 
 		token, err := conf.Exchange(oauth2.NoContext, code)
 		if err != nil {
-			return
+			errortools.CaptureFatal(err)
 		}
 
 		fmt.Println("AccessToken: ", token.AccessToken)
@@ -107,5 +118,5 @@ func InitToken(clientID string, clientSecret string, scopes []string) {
 
 	http.ListenAndServe(":8080", nil)
 
-	return
+	return nil
 }
