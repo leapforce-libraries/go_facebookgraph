@@ -26,9 +26,9 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 		result, err = session.Get(path, params)
 		if err != nil {
 			errorResponse := models.ErrorResponse{}
-			err = mapstructure.Decode(result, &errorResponse)
-			if err != nil {
-				return nil, errortools.ErrorMessage(err)
+			err2 := mapstructure.Decode(result, &errorResponse)
+			if err2 != nil {
+				return nil, errortools.ErrorMessage(err2)
 			}
 
 			if errorResponse.Error.Code == errorCodeRetry {
