@@ -14,7 +14,7 @@ type Media struct {
 	ID            string `mapstructure:"id"`
 	Timestamp     string `mapstructure:"timestamp"`
 	MediaType     string `mapstructure:"media_type"`
-	MediaURL      string `mapstructure:"media_url"`
+	Permalink     string `mapstructure:"permalink"`
 	Caption       string `mapstructure:"caption"`
 	LikeCount     int64  `mapstructure:"like_count"`
 	CommentsCount int64  `mapstructure:"comments_count"`
