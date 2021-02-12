@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	api "github.com/leapforce-libraries/go_facebookgraph/api"
-
 	fb2 "github.com/huandu/facebook/v2"
 	errortools "github.com/leapforce-libraries/go_errortools"
+	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
 type Media struct {

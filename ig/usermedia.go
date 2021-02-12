@@ -3,11 +3,10 @@ package facebookgraph
 import (
 	"fmt"
 
+	fb2 "github.com/huandu/facebook/v2"
 	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 	models "github.com/leapforce-libraries/go_facebookgraph/models"
-
-	fb2 "github.com/huandu/facebook/v2"
 )
 
 const limit int = 100
