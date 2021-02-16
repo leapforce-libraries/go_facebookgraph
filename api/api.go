@@ -24,23 +24,29 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 
 	for retry < maxRetry {
 		result, err = session.Get(path, params)
-		if err != nil {
-			errorResponse := models.ErrorResponse{}
-			err2 := mapstructure.Decode(result, &errorResponse)
-			if err2 != nil {
-				return nil, errortools.ErrorMessage(err2)
-			}
-
-			if errorResponse.Error.Code == errorCodeRetry {
-				retry++
-				time.Sleep(time.Duration(retryWaitXSeconds) * time.Second)
-				fmt.Println("attempt:", retry)
-			} else {
-				return nil, errortools.ErrorMessage(err)
-			}
+		if err == nil {
+			break
 		}
 
-		retry = maxRetry
+		e := new(errortools.Error)
+		e.SetExtra("path", path)
+		e.SetExtra("params", fmt.Sprintf("%v", params))
+
+		errorResponse := models.ErrorResponse{}
+		err2 := mapstructure.Decode(result, &errorResponse)
+		if err2 != nil {
+			e.SetMessage(err2)
+			return nil, e
+		}
+
+		if errorResponse.Error.Code == errorCodeRetry {
+			retry++
+			time.Sleep(time.Duration(retryWaitXSeconds) * time.Second)
+			fmt.Println("attempt:", retry)
+		} else {
+			e.SetMessage(err)
+			return nil, e
+		}
 	}
 
 	return result, nil
