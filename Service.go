@@ -5,23 +5,19 @@ import (
 	"net/http"
 	"os"
 
-	"golang.org/x/oauth2"
-	oauth2fb "golang.org/x/oauth2/facebook"
-
+	fb "github.com/huandu/facebook/v2"
 	errortools "github.com/leapforce-libraries/go_errortools"
 	go_fb "github.com/leapforce-libraries/go_facebookgraph/fb"
 	ig "github.com/leapforce-libraries/go_facebookgraph/ig"
-
-	fb "github.com/huandu/facebook/v2"
+	"golang.org/x/oauth2"
+	oauth2fb "golang.org/x/oauth2/facebook"
 )
 
 const (
-	APIName     string = "FacebookGraph"
-	RedirectURL string = "http://localhost:8080/oauth/redirect"
+	apiName     string = "FacebookGraph"
+	redirectURL string = "http://localhost:8080/oauth/redirect"
 )
 
-// GoogleAdminDirectory stores GoogleAdminDirectory configuration
-//
 type Service struct {
 	session *fb.Session
 }
@@ -43,19 +39,29 @@ func (service *Service) InstagramService() *ig.Service {
 
 // methods
 //
-func NewService(config ServiceConfig) *Service {
-	service := Service{}
+func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
+	if serviceConfig == nil {
+		return nil, errortools.ErrorMessage("ServiceConfig must not be a nil pointer")
+	}
+
+	if serviceConfig.ClientID == "" {
+		return nil, errortools.ErrorMessage("ClientID not provided")
+	}
+
+	if serviceConfig.ClientSecret == "" {
+		return nil, errortools.ErrorMessage("ClientSecret not provided")
+	}
 
 	conf := &oauth2.Config{
-		ClientID:     config.ClientID,
-		ClientSecret: config.ClientSecret,
-		RedirectURL:  RedirectURL,
-		Scopes:       config.Scopes,
+		ClientID:     serviceConfig.ClientID,
+		ClientSecret: serviceConfig.ClientSecret,
+		RedirectURL:  redirectURL,
+		Scopes:       serviceConfig.Scopes,
 		Endpoint:     oauth2fb.Endpoint,
 	}
 
 	token := oauth2.Token{}
-	token.AccessToken = config.AccessToken
+	token.AccessToken = serviceConfig.AccessToken
 
 	// Create a client to manage access token life cycle.
 	client := conf.Client(oauth2.NoContext, &token)
@@ -67,9 +73,7 @@ func NewService(config ServiceConfig) *Service {
 	}
 	_session.SetDebug(fb.DEBUG_OFF)
 
-	service.session = _session
-
-	return &service
+	return &Service{_session}, nil
 }
 
 func InitToken(config ServiceConfig) *errortools.Error {
@@ -77,7 +81,7 @@ func InitToken(config ServiceConfig) *errortools.Error {
 	conf := &oauth2.Config{
 		ClientID:     config.ClientID,
 		ClientSecret: config.ClientSecret,
-		RedirectURL:  RedirectURL,
+		RedirectURL:  redirectURL,
 		Scopes:       config.Scopes,
 		Endpoint:     oauth2fb.Endpoint,
 	}
