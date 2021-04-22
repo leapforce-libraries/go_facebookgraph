@@ -10,13 +10,14 @@ import (
 )
 
 type Media struct {
-	ID            string `mapstructure:"id"`
-	Timestamp     string `mapstructure:"timestamp"`
-	MediaType     string `mapstructure:"media_type"`
-	Permalink     string `mapstructure:"permalink"`
-	Caption       string `mapstructure:"caption"`
-	LikeCount     int64  `mapstructure:"like_count"`
-	CommentsCount int64  `mapstructure:"comments_count"`
+	ID               string `mapstructure:"id"`
+	Timestamp        string `mapstructure:"timestamp"`
+	MediaType        string `mapstructure:"media_type"`
+	MediaProductType string `mapstructure:"media_product_type"`
+	Permalink        string `mapstructure:"permalink"`
+	Caption          string `mapstructure:"caption"`
+	LikeCount        int64  `mapstructure:"like_count"`
+	CommentsCount    int64  `mapstructure:"comments_count"`
 }
 
 // Media returns Instagram media details

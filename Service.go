@@ -68,7 +68,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 
 	// Use OAuth2 client with session.
 	_session := &fb.Session{
-		Version:    "v2.4",
+		Version:    "v10.0",
 		HttpClient: client,
 	}
 	_session.SetDebug(fb.DEBUG_OFF)
