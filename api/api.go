@@ -36,7 +36,7 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 		err2 := mapstructure.Decode(result, &errorResponse)
 		if err2 != nil {
 			e.SetMessage(err2)
-			return nil, e
+			return result, e
 		}
 
 		if errorResponse.Error.Code == errorCodeRetry {
@@ -45,7 +45,7 @@ func GetWithRetry(session *fb.Session, path string, params fb.Params) (fb.Result
 			fmt.Println("attempt:", retry)
 		} else {
 			e.SetMessage(err)
-			return nil, e
+			return result, e
 		}
 	}
 

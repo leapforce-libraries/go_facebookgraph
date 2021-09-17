@@ -1,6 +1,7 @@
 package facebookgraph
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
@@ -64,7 +65,7 @@ func NewService(serviceConfig *ServiceConfig) (*Service, *errortools.Error) {
 	token.AccessToken = serviceConfig.AccessToken
 
 	// Create a client to manage access token life cycle.
-	client := conf.Client(oauth2.NoContext, &token)
+	client := conf.Client(context.Background(), &token)
 
 	// Use OAuth2 client with session.
 	_session := &fb.Session{
@@ -106,7 +107,7 @@ func InitToken(config ServiceConfig) *errortools.Error {
 
 		fmt.Println("code: ", code)
 
-		token, err := conf.Exchange(oauth2.NoContext, code)
+		token, err := conf.Exchange(context.Background(), code)
 		if err != nil {
 			errortools.CaptureFatal(err)
 		}

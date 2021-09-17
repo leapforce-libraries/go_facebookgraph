@@ -32,7 +32,7 @@ type Insight struct {
 
 // Insights return Instagram insights for a user
 //
-func (service *Service) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, *errortools.Error) {
+func (service *Service) Insights(objectID string, metrics []string, period *string, since *int64, until *int64, accessToken *string) (*[]Insight, *fb.Error, *errortools.Error) {
 	path := fmt.Sprintf("/%s/insights", objectID)
 
 	params := fb.Params{}
@@ -52,15 +52,21 @@ func (service *Service) Insights(objectID string, metrics []string, period *stri
 	}
 
 	result, e := api.GetWithRetry(service.session, path, params)
+	err := result.Err()
+	if err != nil {
+		if fbError, ok := err.(*fb.Error); ok {
+			return nil, fbError, e
+		}
+	}
 	if e != nil {
-		return nil, e
+		return nil, nil, e
 	}
 
 	response := InsightsResponse{}
-	err := mapstructure.Decode(result, &response)
+	err = mapstructure.Decode(result, &response)
 	if err != nil {
-		return nil, errortools.ErrorMessage(err)
+		return nil, nil, errortools.ErrorMessage(err)
 	}
 
-	return &response.Data, nil
+	return &response.Data, nil, nil
 }
