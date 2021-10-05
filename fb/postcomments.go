@@ -8,6 +8,13 @@ import (
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
 )
 
+type PostCommentsFilter string
+
+const (
+	PostCommentsFilterTopLevel PostCommentsFilter = "toplevel"
+	PostCommentsFilterStream   PostCommentsFilter = "stream"
+)
+
 const postCommentsLimit int = 50 //limit 100 icm comments does not work...
 
 type PostCommentsResponse struct {
@@ -30,7 +37,7 @@ type PostComment struct {
 
 // PostComments returns Facebook post comments for a post
 //
-func (service *Service) PostComments(postID string, accessToken string, after string) (*PostCommentsResponse, *errortools.Error) {
+func (service *Service) PostComments(postID string, accessToken string, after string, filter *PostCommentsFilter) (*PostCommentsResponse, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
@@ -38,6 +45,10 @@ func (service *Service) PostComments(postID string, accessToken string, after st
 		"after":        after,
 		"access_token": accessToken,
 		"summary":      false,
+	}
+
+	if filter != nil {
+		params["filter"] = *filter
 	}
 
 	result, e := api.GetWithRetry(service.session, path, params)
@@ -57,13 +68,17 @@ func (service *Service) PostComments(postID string, accessToken string, after st
 
 // PostCommentsCount returns Facebook post comments count for a post
 //
-func (service *Service) PostCommentsCount(postID string, accessToken string) (*int64, *errortools.Error) {
+func (service *Service) PostCommentsCount(postID string, accessToken string, filter *PostCommentsFilter) (*int64, *errortools.Error) {
 	path := fmt.Sprintf("/%s/comments", postID)
 
 	params := fb2.Params{
 		"limit":        0,
 		"access_token": accessToken,
 		"summary":      true,
+	}
+
+	if filter != nil {
+		params["filter"] = *filter
 	}
 
 	result, e := api.GetWithRetry(service.session, path, params)
