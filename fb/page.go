@@ -10,14 +10,15 @@ import (
 )
 
 type Page struct {
-	ID          string   `mapstructure:"id"`
-	AccessToken string   `mapstructure:"access_token"`
-	Bio         string   `mapstructure:"bio"`
-	Category    string   `mapstructure:"category"`
-	Description string   `mapstructure:"description"`
-	Emails      []string `mapstructure:"emails"`
-	Name        string   `mapstructure:"name"`
-	Website     string   `mapstructure:"website"`
+	ID             string   `mapstructure:"id"`
+	AccessToken    string   `mapstructure:"access_token"`
+	Bio            string   `mapstructure:"bio"`
+	Category       string   `mapstructure:"category"`
+	Description    string   `mapstructure:"description"`
+	Emails         []string `mapstructure:"emails"`
+	FollowersCount uint32   `mapstructure:"followers_count"`
+	Name           string   `mapstructure:"name"`
+	Website        string   `mapstructure:"website"`
 }
 
 // Page returns Facebook page details
