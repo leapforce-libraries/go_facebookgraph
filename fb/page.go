@@ -16,6 +16,7 @@ type Page struct {
 	Category       string   `mapstructure:"category"`
 	Description    string   `mapstructure:"description"`
 	Emails         []string `mapstructure:"emails"`
+	FanCount       uint32   `mapstructure:"fan_count"`
 	FollowersCount uint32   `mapstructure:"followers_count"`
 	Name           string   `mapstructure:"name"`
 	Website        string   `mapstructure:"website"`
