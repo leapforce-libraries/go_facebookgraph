@@ -6,6 +6,7 @@ import (
 
 	errortools "github.com/leapforce-libraries/go_errortools"
 	api "github.com/leapforce-libraries/go_facebookgraph/api"
+	"github.com/mitchellh/mapstructure"
 )
 
 type User struct {
@@ -34,8 +35,7 @@ func (service *Service) User(userID string, fields []string) (*User, *errortools
 
 	user := User{}
 
-	err := result.DecodeField("", &user)
-	//err = mapstructure.Decode(result, &user)
+	err := mapstructure.Decode(result, &user)
 	if err != nil {
 		return nil, errortools.ErrorMessage(err)
 	}
